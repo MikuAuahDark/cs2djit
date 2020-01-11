@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-LD_PRELOAD=./libcs2djit.so ./cs2d_dedicated
+DIR=$(dirname "$0")
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DIR LD_PRELOAD=$DIR/libcs2djit.so $DIR/cs2d_dedicated
