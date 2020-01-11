@@ -20,6 +20,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "cs2djittarget.h"
+
+#ifdef CS2DLUA_TARGET_LINUX
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,3 +60,5 @@ __attribute__ ((constructor)) void DllMain(void)
 	if (patchSuccess == 0)
 		fprintf(stdout, "CS2DJIT: Patch unsuccessful\n");
 }
+
+#endif /* CS2DLUA_TARGET_LINUX */

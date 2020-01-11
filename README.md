@@ -43,9 +43,18 @@ Compile
 gcc -m32 -mno-sse -shared -o libcs2djit.so -I/usr/include/luajit-2.1 src/cs2djitbase.c src/cs2djitmem.c src/cs2djitlinux.c -Wl,--no-undefined -lluajit-5.1
 ```
 
+You may want to adjust the include directories if you have LuaJIT in non-standard location.
+
 Put `libcs2djit.so` and `cs2djit.sh` to your CS2D server directory.
 
-Or just use CMake to compile it and be happy.
+Or just use CMake to compile it.
+
+```sh
+CFLAGS="-m32 -mno-sse" cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+cmake --build build --target install
+```
+
+Binaries and scripts can be found in `install/bin`
 
 ### Windows
 

@@ -2,6 +2,8 @@
 build/
 install/
 installdir/
+lbuild/
+wbuild/
 cs2djit.dll
 cs2djitwrapper.exe
 libcs2djit.so

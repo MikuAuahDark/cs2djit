@@ -52,7 +52,7 @@ int cs2djit_unmark_as_write(void *start, size_t len, int access)
 	return 0;
 }
 
-#else
+#else /* CS2DLUA_TARGET_WIN */
 
 #include <errno.h>
 #include <unistd.h>
@@ -92,4 +92,4 @@ int cs2djit_unmark_as_write(void *start, size_t len, int access)
 	return 1;
 }
 
-#endif
+#endif /* CS2DLUA_TARGET_WIN */

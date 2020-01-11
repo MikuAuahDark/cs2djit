@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.1)
 
 ###############
 # Some checks #
@@ -56,21 +56,43 @@ message(STATUS "LuaJIT include: ${LUAJIT_INCLUDE_DIR}")
 message(STATUS "LuaJIT lib: ${LUAJIT_LIBRARY}")
 
 if (WIN32)
-	message(FATAL_ERROR "TODO")
+	# For Windows, we have cs2djitwrapper.exe and cs2djit.dll
+	# cs2djit.dll
+	add_library(cs2djit MODULE
+		src/cs2djitbase.c
+		src/cs2djitmem.c
+		src/cs2djitwin.c
+	)
+	set_target_properties(cs2djit PROPERTIES PREFIX "")
+	target_include_directories(cs2djit PRIVATE ${LUAJIT_INCLUDE_DIR})
+	target_link_libraries(cs2djit ${LUAJIT_LIBRARY})
+	install(TARGETS cs2djit DESTINATION bin)
+
+	# cs2djitwrapper.exe
+	add_executable(cs2djitwrapper src/cs2djitwin.c)
+	target_compile_definitions(cs2djitwrapper PRIVATE CS2DJIT_EXE)
+	install(TARGETS cs2djitwrapper DESTINATION bin)
+	return()
 elseif (APPLE)
 	# TODO
 	message(FATAL_ERROR "Patches welcome for macOS!")
 else ()
 	# For Linux, use shared object LD_PRELOAD method
-	add_library(cs2djit SHARED
+	add_library(cs2djit MODULE
 		src/cs2djitbase.c
 		src/cs2djitlinux.c
 		src/cs2djitmem.c
 	)
-	target_link_options(cs2djit PRIVATE -Wl,--no-undefined)
+
+	if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.13.0)
+		target_link_options(cs2djit PRIVATE -Wl,--no-undefined)
+	else ()
+		list(APPEND CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+	endif()
 	target_include_directories(cs2djit PRIVATE ${LUAJIT_INCLUDE_DIR})
 	target_link_libraries(cs2djit ${LUAJIT_LIBRARY})
 	install(TARGETS cs2djit DESTINATION bin)
+	install(PROGRAMS cs2djit.sh DESTINATION bin)
 	return()
 endif()
 
