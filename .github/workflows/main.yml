@@ -1,0 +1,33 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare 32-bit Multiarch
+      run: sudo dpkg --add-architecture i386
+    - name: Update Packages
+      if: succeeded() || failed()
+      run: sudo apt update
+    - name: Install LuaJIT Development Libraries (i386)
+      run: sudo apt install --assume-yes gcc-multilib libluajit-5.1-dev:i386
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        path: cs2djit
+    - name: Configure
+      run: CFLAGS=-m32 cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+    - name: Install
+      run: cmake --build build --target install
+    - name: Copy Installed File
+      run: |
+        mkdir artifact
+        cp install/bin/libcs2djit.so artifact/libcs2djit.so
+        cp cs2djit/cs2djit.sh artifact/cs2djit.sh
+    - name: Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: cs2djit-linux
+        path: artifact
