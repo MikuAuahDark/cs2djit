@@ -16,6 +16,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: cs2djit
+    - name: Submodule Init
+      run: |
+        cd cs2djit
+        git submodule sync --recursive
+        git submodule update --init --force --recursive --depth=1
     - name: Configure
       run: CFLAGS=-m32 cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
