@@ -103,12 +103,12 @@ static unsigned int updateCRC32(unsigned char octet, unsigned int crc)
 	return (crc32Table[(crc ^ octet) & 0xff] ^ ((crc) >> 8));
 }
 
-static size_t min(size_t a, size_t b)
+static size_t minValue(size_t a, size_t b)
 {
 	return a > b ? b : a;
 }
 
-static size_t max(size_t a, size_t b)
+static size_t maxValue(size_t a, size_t b)
 {
 	return a > b ? a : b;
 }
@@ -165,8 +165,8 @@ int cs2djit_init(size_t baseAddress, FILE *exe)
 	for (; i < sizeof(LuaFunctionPointer)/sizeof(void*); i++)
 	{
 		size_t addr = targetAddress + luaFuncPtr[i];
-		minAddress = min(addr, minAddress);
-		maxAddress = max(addr, maxAddress);
+		minAddress = minValue(addr, minAddress);
+		maxAddress = maxValue(addr, maxAddress);
 	}
 
 	/* Set memory protection */
