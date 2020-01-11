@@ -10,6 +10,10 @@ jobs:
       run: sudo dpkg --add-architecture i386
     - name: Update Packages
       run: sudo apt update
+    - name: Download Better CMake
+      run: wget https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh
+    - name: Install Better CMake
+      run: sh cmake-3.16.2-Linux-x86_64.sh --prefix=$PWD/cmake
     - name: Install LuaJIT Development Libraries (i386)
       run: sudo apt install --assume-yes gcc-multilib libluajit-5.1-dev:i386
     - name: Checkout
@@ -22,9 +26,9 @@ jobs:
         git submodule sync --recursive
         git submodule update --init --force --recursive --depth=1
     - name: Configure
-      run: CFLAGS=-m32 cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+      run: CFLAGS=-m32 $PWD/cmake/bin/cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
-      run: cmake --build build --target install
+      run: $PWD/cmake/bin/cmake --build build --target install
     - name: Copy Installed File
       run: |
         mkdir artifact
