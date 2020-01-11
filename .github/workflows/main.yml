@@ -13,7 +13,7 @@ jobs:
     - name: Download Better CMake
       run: wget https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh
     - name: Install Better CMake
-      run: sh cmake-3.16.2-Linux-x86_64.sh --prefix=$PWD/cmake
+      run: yes | sh cmake-3.16.2-Linux-x86_64.sh --prefix=$PWD/cmake
     - name: Install LuaJIT Development Libraries (i386)
       run: sudo apt install --assume-yes gcc-multilib libluajit-5.1-dev:i386
     - name: Checkout
