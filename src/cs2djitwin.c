@@ -68,9 +68,7 @@ BOOL APIENTRY DllMain(HINSTANCE _, DWORD reason, LPVOID __)
 
 #else
 
-#include <signal.h>
-
-wchar_t g_TempBuffer[32768]; /* uh */
+static wchar_t g_TempBuffer[32768]; /* uh */
 
 int main(int argc, char* argv[])
 {
@@ -84,6 +82,7 @@ int main(int argc, char* argv[])
 	PROCESS_INFORMATION processInfo;
 
 	/* Windows API UTF-16 is bad */
+	memset(g_TempBuffer, 0, 32768 * sizeof(wchar_t));
 	if (GetModuleFileNameW(NULL, g_TempBuffer, 32767) == 0)
 		return 1;
 	
@@ -123,10 +122,9 @@ int main(int argc, char* argv[])
 	startupInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 
 	/* Start process */
-	g_TempBuffer[0] = 0;
 	if (CreateProcessW(
 		dedicatedFile, /* lpApplicationName */
-		g_TempBuffer, /* lpCommandLine */
+		GetCommandLineW(), /* lpCommandLine */
 		NULL, /* lpProcessAttributes */
 		NULL, /* lpThreadAttributes */
 		1, /* bInheritHandles */
