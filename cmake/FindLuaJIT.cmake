@@ -4,23 +4,32 @@
 # LUAJIT_INCLUDE_DIR
 # LUAJIT_LIBRARY
 
-set(LUAJIT_SEARCH_PATHS
-	/usr/local
-	/usr
-	$ENV{LUAJIT_DIR}
-	${LUAJIT_DIR}
-)
+if (DEFINED ENV{LUAJIT_DIR})
+	set(LUAJIT_DIR "${LUAJIT_DIR} $ENV{LUAJIT_DIR}")
+endif()
+string(STRIP "${LUAJIT_DIR}" LUAJIT_DIR)
+message(STATUS "LuaJIT DIR: ${LUAJIT_DIR}")
 
 find_path(LUAJIT_INCLUDE_DIR
 	NAMES luajit.h lua.h
 	PATH_SUFFIXES include/luajit-2.1 include/luajit2.1 include/luajit-2.0 include/luajit2.0 include src
-	PATHS ${LUAJIT_SEARCH_PATHS}
+	PATHS /usr/local /usr ${LUAJIT_DIR}
+)
+find_path(LUAJIT_INCLUDE_DIR
+	NAMES luajit.h lua.h
+	HINTS ${LUAJIT_DIR}
+	NO_CMAKE_FIND_ROOT_PATH
 )
 
 find_library(LUAJIT_LIBRARY
 	NAMES luajit5.1.dll luajit5.1 luajit-5.1 lua51
 	PATH_SUFFIXES lib
-	PATHS ${LUAJIT_SEARCH_PATHS}
+	PATHS /usr/local /usr ${LUAJIT_DIR}
+)
+find_library(LUAJIT_LIBRARY
+	NAMES luajit5.1.dll luajit5.1 luajit-5.1 lua51
+	HINTS ${LUAJIT_DIR}
+	NO_CMAKE_FIND_ROOT_PATH
 )
 
 include(FindPackageHandleStandardArgs)
