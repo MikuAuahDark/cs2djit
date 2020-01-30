@@ -40,7 +40,7 @@ sudo apt install libluajit-5.1-dev:i386
 Compile
 
 ```sh
-gcc -m32 -mno-sse -shared -o libcs2djit.so -I/usr/include/luajit-2.1 src/cs2djitbase.c src/cs2djitmem.c src/cs2djitlinux.c -Wl,--no-undefined -lluajit-5.1
+gcc -m32 -shared -o libcs2djit.so -I/usr/include/luajit-2.1 src/cs2djitbase.c src/cs2djitmem.c src/cs2djitlinux.c -Wl,--no-undefined -lluajit-5.1
 ```
 
 You may want to adjust the include directories if you have LuaJIT in non-standard location.
@@ -50,7 +50,7 @@ Put `libcs2djit.so` and `cs2djit.sh` to your CS2D server directory.
 Or just use CMake to compile it.
 
 ```sh
-CFLAGS="-m32 -mno-sse" cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+CFLAGS=-m32 cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
 cmake --build build --target install
 ```
 
@@ -81,7 +81,7 @@ and any _funny_ problems caused by it can't, and won't be fixed.
 ```cmd
 rem Assume you have Visual Studio toolchain, and environment variable LUAJIT_DIR is location where the
 rem LuaJIT include and resulting libraries are, plus %CD% = current repository:
-cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=$PWD/install
+cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=%CD%/install
 cmake --build build --config Release --target install
 ```
 
@@ -107,7 +107,7 @@ Any additional arguments are passed to cs2d_dedicated as-is.
 
 ### Windows
 
-Note: Some antivirus mistakenly mark cs2djitwrapper.exe as unwanted software. Rest assured you already aware and decided to
+Note: Some antivirus mistakenly mark `cs2djitwrapper.exe` as unwanted software. Rest assured you already aware and decided to
 use the prebuilt binaries anyway or you've compiled one yourself.
 
 Place `cs2djitwrapper.exe` and `cs2djit.dll` at same folder as your CS2D server folder beside `cs2d_dedicated.exe`, then
