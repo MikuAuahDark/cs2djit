@@ -58,19 +58,63 @@ Binaries and scripts can be found in `install/bin`
 
 ### Windows
 
-TODO
+#### Cross-compiling from Linux
+
+Assume Debian-based, it can be done with `mingw-w64` toolchain. This however does not cover how you compile
+LuaJIT itself. Refer to [LuaJIT page](https://luajit.org/install.html#cross) on how to cross-compile one.
+
+```sh
+# Assume environment variable LUAJIT_DIR is location where the LuaJIT include and resulting libraries are
+# and $PWD = current repository:
+cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target install
+```
+
+The resulting binaries can be found in `install/bin`. You may want to `strip` it manually first. It helps reducing antivirus
+false alarms.
+
+#### MSVC
+
+It's also possible to use MSVC, but this is not recommended due CS2D uses GNU toolchain for some parts of its compilation
+and any _funny_ problems caused by it can't, and won't be fixed.
+
+```cmd
+rem Assume you have Visual Studio toolchain, and environment variable LUAJIT_DIR is location where the
+rem LuaJIT include and resulting libraries are, plus %CD% = current repository:
+cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=$PWD/install
+cmake --build build --config Release --target install
+```
+
+The resulting binaries can be found in `install/bin`.
+
+#### MinGW
+
+The steps is more or less, similar to cross-compile from Linux above.
 
 Running
 -----
 
 ### Linux
 
-Simply run `cs2djit.sh`
+Place `cs2djit.sh` and `libcs2djit.so` at same folder as your CS2D server folder beside `cs2d_dedicated`, then simply run
+`cs2djit.sh`.
 
 ```sh
 bash cs2djit.sh
 ```
 
+Any additional arguments are passed to cs2d_dedicated as-is.
+
 ### Windows
 
-TODO
+Note: Some antivirus mistakenly mark cs2djitwrapper.exe as unwanted software. Rest assured you already aware and decided to
+use the prebuilt binaries anyway or you've compiled one yourself.
+
+Place `cs2djitwrapper.exe` and `cs2djit.dll` at same folder as your CS2D server folder beside `cs2d_dedicated.exe`, then
+simply run `cs2djitwrapper.exe`.
+
+```
+cs2djitwrapper.exe
+```
+
+Any additional arguments are passed to cs2d_dedicated.exe as-is.

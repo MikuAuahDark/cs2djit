@@ -60,8 +60,6 @@ jobs:
         path: cs2djit
     - name: Submodule Init
       run: cd cs2djit && git submodule sync --recursive && git submodule update --init --force --recursive --depth=1
-    - name: Debug Files
-      run: find cs2djit || true
     - name: Configure
       run: LUAJIT_DIR=$PWD/LuaJIT/src $PWD/cmake/bin/cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
