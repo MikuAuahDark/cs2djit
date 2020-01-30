@@ -26,7 +26,7 @@
 
 #ifdef CS2DLUA_TARGET_WIN
 
-#include <Windows.h>
+#include <windows.h>
 
 int cs2djit_mark_as_write(void *start, size_t len)
 {
