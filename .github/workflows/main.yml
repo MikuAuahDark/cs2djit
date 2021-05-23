@@ -13,15 +13,14 @@ jobs:
     - name: Download Better CMake
       run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.sh
     - name: Install Better CMake
-      run: mkdir cmake && printf "y\nn\ny\ny\ny\n" | sh cmake-install.sh --prefix=$PWD/cmake
+      run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT Development Libraries (i386)
       run: sudo apt-get install --assume-yes gcc-multilib libluajit-5.1-dev:i386
     - name: Checkout
       uses: actions/checkout@v2
       with:
         path: cs2djit
-    - name: Submodule Init
-      run: cd cs2djit && git submodule sync --recursive && git submodule update --init --force --recursive --depth=1
+        submodules: true
     - name: Configure
       run: CFLAGS=-m32 $PWD/cmake/bin/cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
@@ -41,7 +40,7 @@ jobs:
     - name: Download Better CMake
       run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.sh
     - name: Install Better CMake
-      run: mkdir cmake && printf "y\nn\ny\ny\ny\n" | sh cmake-install.sh --prefix=$PWD/cmake
+      run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT (Host)
       run: sudo apt-get install --assume-yes luajit
     - name: Install MinGW-w64 Toolchain
@@ -58,8 +57,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: cs2djit
-    - name: Submodule Init
-      run: cd cs2djit && git submodule sync --recursive && git submodule update --init --force --recursive --depth=1
+        submodules: true
     - name: Configure
       run: LUAJIT_DIR=$PWD/LuaJIT/src $PWD/cmake/bin/cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
