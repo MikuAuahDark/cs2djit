@@ -31,7 +31,6 @@
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
-#include "luajit.h"
 
 #include "cs2djitbase.h"
 #include "cs2djitmem.h"
@@ -41,11 +40,11 @@
 
 /* Platform selection */
 #if defined(CS2DLUA_TARGET_WIN)
-#	include "../luawrap/address/win_1.0.1.1.h"
+#	include "../luawrap/address/win_1.0.1.2.h"
 #elif defined(CS2DLUA_TARGET_MAC)
 #	error "Patches welcome for macOS!"
 #elif defined(CS2DLUA_TARGET_LINUX)
-#	include "../luawrap/address/linux_1.0.1.1.h"
+#	include "../luawrap/address/linux_1.0.1.2.h"
 #else
 #	error "Unknown target!"
 #endif
