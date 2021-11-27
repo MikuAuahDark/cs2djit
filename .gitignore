@@ -3,6 +3,7 @@ build/
 install/
 installdir/
 lbuild/
+package/
 wbuild/
 cs2djit.dll
 cs2djitwrapper.exe
