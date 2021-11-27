@@ -4,14 +4,14 @@ on: [push]
 
 jobs:
   build-linux:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
     - name: Prepare 32-bit Multiarch
       run: sudo dpkg --add-architecture i386
     - name: Update Packages
       run: sudo apt-get update
     - name: Download Better CMake
-      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.sh
+      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh
     - name: Install Better CMake
       run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT Development Libraries (i386)
@@ -38,7 +38,7 @@ jobs:
     - name: Update Packages
       run: sudo apt-get update
     - name: Download Better CMake
-      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.16.3/cmake-3.16.3-Linux-x86_64.sh
+      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh
     - name: Install Better CMake
       run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT (Host)

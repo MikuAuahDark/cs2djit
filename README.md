@@ -4,8 +4,6 @@ CS2D JIT
 Replaces CS2D Lua engine with [LuaJIT](http://luajit.org/luajit.html) for faster server performance,
 external Lua C modules support, and FFI support.
 
-**Disclaimer: 
-
 Disclaimer
 -----
 
@@ -82,7 +80,7 @@ false alarms.
 #### MSVC
 
 It's also possible to use MSVC, but this is not recommended due CS2D uses GNU toolchain for some parts of its compilation
-and any _funny_ problems caused by it can't, and won't be fixed.
+and any _funny_ problems caused by it can't (and won't) be fixed.
 
 ```cmd
 rem Assume you have Visual Studio toolchain, and environment variable LUAJIT_DIR is location where the
