@@ -122,6 +122,7 @@ int main(int argc, char* argv[])
 	startupInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 
 	/* Start process */
+	fwprintf(stderr, L"Launching cs2d_dedicated.exe with path: %s\n", dedicatedFile);
 	if (CreateProcessW(
 		dedicatedFile, /* lpApplicationName */
 		GetCommandLineW(), /* lpCommandLine */
@@ -135,7 +136,8 @@ int main(int argc, char* argv[])
 		&processInfo /* lpProcessInformation */
 	) == 0)
 	{
-		fputs("Failed to start cs2d_dedicated.exe\n", stderr);
+		// fputs("Failed to start cs2d_dedicated.exe", stderr);
+		fprintf(stderr, "Failed to start cs2d_dedicated.exe: %d\n", (int) GetLastError());
 		free(currentDir);
 		free(dedicatedFile);
 		return 1;
