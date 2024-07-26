@@ -4,29 +4,25 @@ on: [push]
 
 jobs:
   build-linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Prepare 32-bit Multiarch
       run: sudo dpkg --add-architecture i386
     - name: Update Packages
       run: sudo apt-get update
-    - name: Download Better CMake
-      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh
-    - name: Install Better CMake
-      run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT Development Libraries (i386)
       run: sudo apt-get install --assume-yes gcc-multilib libluajit-5.1-dev:i386
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: cs2djit
         submodules: true
     - name: Configure
-      run: CFLAGS=-m32 $PWD/cmake/bin/cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+      run: CFLAGS=-m32 cmake -Bbuild -Scs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
-      run: $PWD/cmake/bin/cmake --build build --target install
+      run: cmake --build build --target install
     - name: Artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: cs2djit-linux
         path: install/bin
@@ -37,16 +33,12 @@ jobs:
       run: sudo dpkg --add-architecture i386
     - name: Update Packages
       run: sudo apt-get update
-    - name: Download Better CMake
-      run: wget -O cmake-install.sh https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh
-    - name: Install Better CMake
-      run: mkdir cmake && sh cmake-install.sh --prefix=$PWD/cmake --skip-license
     - name: Install LuaJIT (Host)
       run: sudo apt-get install --assume-yes luajit
     - name: Install MinGW-w64 Toolchain
       run: sudo apt-get install --assume-yes mingw-w64 gcc-multilib
     - name: Clone LuaJIT (For Target)
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: LuaJIT/LuaJIT
         path: LuaJIT
@@ -54,20 +46,20 @@ jobs:
     - name: Build LuaJIT (For Target)
       run: cd LuaJIT && make TARGET_FLAGS="-static-libgcc" HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows HOST_LUA=luajit amalg
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: cs2djit
         submodules: true
     - name: Configure
-      run: LUAJIT_DIR=$PWD/LuaJIT/src $PWD/cmake/bin/cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Hcs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+      run: LUAJIT_DIR=$PWD/LuaJIT/src cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Scs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
-      run: $PWD/cmake/bin/cmake --build build --target install
+      run: cmake --build build --target install
     - name: Copy lua51.dll to Install
       run: cp LuaJIT/src/lua51.dll install/bin/lua51.dll
     - name: Strip
       run: cd install/bin && strip lua51.dll && strip cs2djit.dll && strip cs2djitwrapper.exe
     - name: Artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: cs2djit-windows
         path: install/bin
