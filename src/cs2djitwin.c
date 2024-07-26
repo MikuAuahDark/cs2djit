@@ -47,15 +47,21 @@ BOOL APIENTRY DllMain(HINSTANCE _, DWORD reason, LPVOID __)
 		
 		if (GetModuleFileNameW(NULL, moduleName, 32767) == 0)
 		{
+			result = (int) GetLastError();
 			free(moduleName);
+			fprintf(stderr, "GetModuleFileNameW failed: %d\n", result);
 			return 0;
 		}
 
 		/* Open executable */
 		fileExe = _wfopen(moduleName, L"rb");
-		free(moduleName);
 		if (fileExe == NULL)
+		{
+			fwprintf(stderr, "_wfopen failed for %ls\n", moduleName);
+			free(moduleName);
 			return 0;
+		}
+		free(moduleName);
 
 		/* Init */
 		result = cs2djit_init((size_t) GetModuleHandleA(NULL), fileExe);
@@ -68,11 +74,9 @@ BOOL APIENTRY DllMain(HINSTANCE _, DWORD reason, LPVOID __)
 
 #else
 
-static wchar_t g_TempBuffer[32768]; /* uh */
-
 int main(int argc, char* argv[])
 {
-	wchar_t *lastSlash, *dedicatedFile = NULL, *currentDir = NULL;
+	wchar_t *lastSlash, *dedicatedFile = NULL, *currentDir = NULL, g_TempBuffer;
 	void *otherProcMem = NULL, *loadLibrary;
 	size_t dedicatedLen, dirLen;
 	HANDLE dedicated = INVALID_HANDLE_VALUE;
@@ -80,6 +84,10 @@ int main(int argc, char* argv[])
 	DWORD exitCode;
 	STARTUPINFOW startupInfo;
 	PROCESS_INFORMATION processInfo;
+
+	g_TempBuffer = calloc(32768, sizeof(wchar_t));
+	if (g_TempBuffer == NULL)
+		return 1;
 
 	/* Windows API UTF-16 is bad */
 	memset(g_TempBuffer, 0, 32768 * sizeof(wchar_t));
@@ -136,7 +144,6 @@ int main(int argc, char* argv[])
 		&processInfo /* lpProcessInformation */
 	) == 0)
 	{
-		// fputs("Failed to start cs2d_dedicated.exe", stderr);
 		fprintf(stderr, "Failed to start cs2d_dedicated.exe: %d\n", (int) GetLastError());
 		free(currentDir);
 		free(dedicatedFile);
@@ -169,11 +176,13 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	/* Start process */
-	/* TODO: Handle Ctrl+C and pass it to cs2d_dedicated */
+	/* Wait for inject to finish */
 	WaitForSingleObject(otherThread, INFINITE);
 	CloseHandle(otherThread);
 	VirtualFreeEx(processInfo.hProcess, otherProcMem, 1024, MEM_RELEASE);
+
+	/* Start process */
+	/* TODO: Handle Ctrl+C and pass it to cs2d_dedicated */
 	ResumeThread(processInfo.hThread);
 	WaitForSingleObject(processInfo.hProcess, INFINITE);
 

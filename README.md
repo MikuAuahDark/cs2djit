@@ -54,7 +54,7 @@ Put `libcs2djit.so` and `cs2djit.sh` to your CS2D server directory.
 Or just use CMake to compile it.
 
 ```sh
-CFLAGS=-m32 cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+CFLAGS=-m32 cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Release --install-prefix $PWD/install
 cmake --build build --target install
 ```
 
@@ -70,7 +70,7 @@ LuaJIT itself. Refer to [LuaJIT page](https://luajit.org/install.html#cross) on 
 ```sh
 # Assume environment variable LUAJIT_DIR is location where the LuaJIT include and resulting libraries are
 # and $PWD = current repository:
-cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+cmake -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake -Bbuild -S. --install-prefix $PWD/install -DCMAKE_BUILD_TYPE=Release
 cmake --build build --target install
 ```
 
@@ -85,7 +85,7 @@ and any _funny_ problems caused by it can't (and won't) be fixed.
 ```cmd
 rem Assume you have Visual Studio toolchain, and environment variable LUAJIT_DIR is location where the
 rem LuaJIT include and resulting libraries are, plus %CD% = current repository:
-cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=%CD%/install
+cmake -Bbuild -S. --install-prefix %CD%/install
 cmake --build build --config Release --target install
 ```
 
