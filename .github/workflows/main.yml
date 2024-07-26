@@ -27,16 +27,12 @@ jobs:
         name: cs2djit-linux
         path: install/bin
   build-windows:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-    - name: Prepare 32-bit Multiarch
-      run: sudo dpkg --add-architecture i386
     - name: Update Packages
       run: sudo apt-get update
-    - name: Install LuaJIT (Host)
-      run: sudo apt-get install --assume-yes luajit
-    - name: Install MinGW-w64 Toolchain
-      run: sudo apt-get install --assume-yes mingw-w64 gcc-multilib
+    - name: Install MinGW-w64 Toolchain And LuaJIT (for host)
+      run: sudo apt-get install --assume-yes mingw-w64 gcc-multilib build-essential luajit
     - name: Clone LuaJIT (For Target)
       uses: actions/checkout@v4
       with:
