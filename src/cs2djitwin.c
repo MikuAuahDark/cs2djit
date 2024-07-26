@@ -57,7 +57,7 @@ BOOL APIENTRY DllMain(HINSTANCE _, DWORD reason, LPVOID __)
 		fileExe = _wfopen(moduleName, L"rb");
 		if (fileExe == NULL)
 		{
-			fwprintf(stderr, "_wfopen failed for %ls\n", moduleName);
+			fwprintf(stderr, L"_wfopen failed for %ls\n", moduleName);
 			free(moduleName);
 			return 0;
 		}
@@ -76,7 +76,7 @@ BOOL APIENTRY DllMain(HINSTANCE _, DWORD reason, LPVOID __)
 
 int main(int argc, char* argv[])
 {
-	wchar_t *lastSlash, *dedicatedFile = NULL, *currentDir = NULL, g_TempBuffer;
+	wchar_t *lastSlash, *dedicatedFile = NULL, *currentDir = NULL, *g_TempBuffer = NULL;
 	void *otherProcMem = NULL, *loadLibrary;
 	size_t dedicatedLen, dirLen;
 	HANDLE dedicated = INVALID_HANDLE_VALUE;
