@@ -72,6 +72,12 @@ if (WIN32)
 	add_executable(cs2djitwrapper src/cs2djitwin.c)
 	target_compile_definitions(cs2djitwrapper PRIVATE CS2DJIT_EXE)
 	install(TARGETS cs2djitwrapper DESTINATION bin)
+
+	if (MINGW)
+		# Why do I have to bother with libgcc_s_dw2-1.dll?
+		target_link_options(cs2djit PRIVATE -static-libgcc)
+		target_link_options(cs2djitwrapper PRIVATE -static-libgcc)
+	endif()
 	return()
 elseif (APPLE)
 	# TODO
