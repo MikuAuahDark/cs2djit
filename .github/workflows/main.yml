@@ -51,7 +51,7 @@ jobs:
         path: cs2djit
         submodules: true
     - name: Configure
-      run: LUAJIT_DIR=$PWD/LuaJIT/src cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Scs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
+      run: CLFAGS=-static-libgcc LUAJIT_DIR=$PWD/LuaJIT/src cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/cs2djit/cmake/mingw-w64.cmake -Bbuild -Scs2djit -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_BUILD_TYPE=Release
     - name: Install
       run: cmake --build build --target install
     - name: Copy lua51.dll to Install
