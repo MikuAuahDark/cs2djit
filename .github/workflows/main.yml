@@ -33,6 +33,8 @@ jobs:
       run: sudo apt-get update
     - name: Install MinGW-w64 Toolchain And LuaJIT (for host)
       run: sudo apt-get install --assume-yes mingw-w64 gcc-multilib build-essential luajit
+    - name: Print MingGW-w64 specs
+      run: i686-w64-mingw32-gcc -v
     - name: Clone LuaJIT (For Target)
       uses: actions/checkout@v4
       with:
@@ -40,7 +42,7 @@ jobs:
         path: LuaJIT
         ref: v2.1
     - name: Build LuaJIT (For Target)
-      run: cd LuaJIT && make TARGET_FLAGS="-static-libgcc" HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows HOST_LUA=luajit amalg
+      run: cd LuaJIT && make TARGET_FLAGS="-static-libgcc" HOST_CC="gcc -m32" CROSS=i686-w64-mingw32- TARGET_SYS=Windows HOST_LUA=luajit amalg -j$(nproc)
     - name: Checkout
       uses: actions/checkout@v4
       with:
