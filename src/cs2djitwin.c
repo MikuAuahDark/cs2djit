@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
 	dedicatedFile = malloc(dedicatedLen * sizeof(wchar_t));
 	if (dedicatedFile == NULL)
 		return 1;
-	swprintf(dedicatedFile, dedicatedLen, L"%s%s", currentDir ? currentDir : L"", L"cs2d_dedicated.exe");
+	swprintf(dedicatedFile, dedicatedLen, L"%ls%ls", currentDir ? currentDir : L"", L"cs2d_dedicated.exe");
 
 	/* Setup Startup Info */
 	memset(&startupInfo, 0, sizeof(STARTUPINFOW));
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	startupInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);
 
 	/* Start process */
-	fwprintf(stderr, L"Launching cs2d_dedicated.exe with path: %s\n", dedicatedFile);
+	fprintf(stderr, "Launching cs2d_dedicated.exe with path: %ls\n", dedicatedFile);
 	if (CreateProcessW(
 		dedicatedFile, /* lpApplicationName */
 		GetCommandLineW(), /* lpCommandLine */
