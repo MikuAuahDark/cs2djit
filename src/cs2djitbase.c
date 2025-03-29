@@ -40,11 +40,11 @@
 
 /* Platform selection */
 #if defined(CS2DLUA_TARGET_WIN)
-#	include "../luawrap/address/win_1.0.1.4.h"
+#	include "../luawrap/address/win_1.0.1.6.h"
 #elif defined(CS2DLUA_TARGET_MAC)
 #	error "Patches welcome for macOS!"
 #elif defined(CS2DLUA_TARGET_LINUX)
-#	include "../luawrap/address/linux_1.0.1.4.h"
+#	include "../luawrap/address/linux_1.0.1.6.h"
 #else
 #	error "Unknown target!"
 #endif
